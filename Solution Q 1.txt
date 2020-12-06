@@ -1,0 +1,137 @@
+scholar no.:17U02055
+
+Q 1)
+
+java Code:
+
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Tree{
+
+
+static class Node
+{
+	int val;
+	Node left, right;
+
+	public Node(int val)
+	{
+		this.val = val;
+		this.left = this.right = null;
+	}
+};
+
+
+static HashMap<Node, Node> um = new HashMap<>();
+
+static void store_Parent(Node root)
+{
+	
+	Queue<Node> q = new LinkedList<>();
+	q.add(root);
+
+	
+	while (!q.isEmpty())
+	{
+		Node p = q.poll();
+
+		if (p == root)
+		{
+			um.put(p, null);
+		}
+
+		if (p.left != null)
+		{
+			um.put(p.left, p);
+			q.add(p.left);
+		}
+
+		if (p.right != null) 
+		{
+			um.put(p.right, p);
+			q.add(p.right);
+		}
+	}
+}
+
+
+static void nodeAtDisK(Node root,Node target, int k)
+{
+	
+	
+	HashSet<Node> s = new HashSet<>();
+	int dist = 0;
+	
+	Queue<Node> q = new LinkedList<>();
+	q.add(target);
+	s.add(target);
+
+	
+	while (!q.isEmpty())
+	{
+		
+		
+		if (dist == k) 
+		{
+			while (!q.isEmpty()) 
+			{
+				System.out.print(q.peek().val + " ");
+				q.poll();
+			}
+		}
+
+		// BFS 
+		int size = q.size();
+		for(int i = 0; i < size; i++)
+		{
+			Node p = q.poll();
+
+			if (p.left != null && !s.contains(p.left)) 
+			{
+				q.add(p.left);
+				s.add(p.left);
+			}
+
+			
+			if (p.right != null && !s.contains(p.right)) 
+			{
+				q.add(p.right);
+				s.add(p.right);
+			}
+
+			
+			if (um.get(p) != null &&
+				!s.contains(um.get(p))) 
+			{
+				q.add(um.get(p));
+				s.add(um.get(p));
+			}
+		}
+
+		dist++;
+	}
+}
+
+
+public static void main(String[] args) 
+{
+	Node root = new Node(20);
+	root.left = new Node(8);
+	root.right = new Node(22);
+	root.left.left = new Node(4);
+	root.left.right = new Node(12);
+	root.left.right.left = new Node(10);
+	root.left.right.right = new Node(14);
+	
+	Node target = root.left.right;
+	
+	store_Parent(root);
+	
+	nodeAtDisK(root, target, 3);
+}
+
+}

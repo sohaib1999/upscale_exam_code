@@ -1,0 +1,120 @@
+scholar no.:17U02055
+
+Q 2)
+
+java code:
+
+
+
+class Orange {
+
+	static int C = 5;
+	static int R = 3;
+	static int INT_MAX = 10000000;
+
+	
+	static int[][] table = new int[R][C];
+
+	
+	static int[][] visited = new int[R][C];
+
+	static int min(int p, int q, int r, int s)
+	{
+		int temp1 = p < q ? p : q;
+		int temp2 = r < s ? r : s;
+
+		if (temp1 < temp2)
+			return temp1;
+		return temp2;
+	}
+
+	
+	static int distance(int arr[][], int i, int j)
+	{
+		
+		if (i >= R || j >= C || i < 0 || j < 0)
+			return INT_MAX;
+
+		
+		else if (arr[i][j] == 0) {
+			table[i][j] = INT_MAX;
+			return INT_MAX;
+		}
+
+		else if (arr[i][j] == 2) {
+			table[i][j] = 0;
+			return 0;
+		}
+
+		
+		else if (visited[i][j] == 1) 
+			return INT_MAX;
+
+		else {
+
+			visited[i][j] = 1;
+
+			
+			int temp1 = Distance(arr, i + 1, j);
+			int temp2 = Distance(arr, i - 1, j);
+			int temp3 = Distance(arr, i, j + 1);
+			int temp4 = Distance(arr, i, j - 1);
+
+			
+			int min_value
+				= 1 + min(temp1, temp2, temp3, temp4);
+			
+			if (table[i][j] > 0 && 
+				table[i][j] < INT_MAX) {
+				if (min_value < table[i][j])
+					table[i][j] = min_value;
+			}
+			else
+				table[i][j] = min_value;
+
+			visited[i][j] = 0;
+		}
+
+		return table[i][j];
+	
+}
+
+	
+	static int minimumTime(int arr[][])
+	{
+		int max = 0;
+
+		
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				if (arr[i][j] == 1)
+					distance(arr, i, j);
+			}
+		}
+
+		
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				if (arr[i][j] == 1 && 
+					table[i][j] > max)
+					max = table[i][j];
+			}
+		}
+
+		
+		if (max < INT_MAX)
+			return max;
+
+		return -1;
+	}
+
+	
+	public static void main(String[] args)
+	{
+		int arr[][] = { { 2, 1, 0, 2, 1 },{ 0, 0, 1, 2, 1 },{ 1, 0, 0, 2, 1 } };
+
+		System.out.println(minimumTime(arr));
+	}
+
+}
+
